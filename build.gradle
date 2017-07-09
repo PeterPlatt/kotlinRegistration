@@ -29,6 +29,7 @@ apply plugin: 'org.junit.platform.gradle.plugin'
 
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
+
 compileKotlin {
 	kotlinOptions.jvmTarget = "1.8"
 }
@@ -43,19 +44,14 @@ repositories {
 }
 
 
-junitPlatform {
-	tags {
-		// include 'TAGS TO INCLUDE'
-		// exclude 'TAGS TO EXCLUDE'
-	}
-}
+
 
 
 dependencies {
 
 	compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}")
 	compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
-	testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+	testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
 
 	// Spring Dependencies
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
@@ -78,7 +74,7 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 
 	// JUnit Jupiter API
-	testCompile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
+	testCompile("org.junit.jupiter:junit-jupiter-api:${ junitJupiterVersion}")
 	testCompile("org.junit.platform:junit-platform-runner:${junitPlatformVersion}")
 
 	// Spring extension for JUnit5
@@ -86,5 +82,5 @@ dependencies {
 
 	// TestEngine implementations (only needed at runtime)
 	testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")    //JUnit5
-	testRuntime("org.junit.vintage:junit-vintage-engine:${junitVintageVersion}")    //JUnit4
+
 }
