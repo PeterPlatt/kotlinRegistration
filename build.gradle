@@ -2,8 +2,8 @@ buildscript {
 	ext {
 		kotlinVersion = '1.1.3'
 		springBootVersion = '2.0.0.M2'
-		junitPlatformVersion = '1.0.0-M4'
-		junitJupiterVersion = '5.0.0-M4'
+		junitPlatformVersion = '1.0.0-M5'
+		junitJupiterVersion = '5.0.0-M5'
 		junitVintageVersion = '4.12.0-M2'
 	}
 	repositories {
@@ -16,13 +16,14 @@ buildscript {
 		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
 		classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
 		classpath("org.junit.platform:junit-platform-gradle-plugin:${junitPlatformVersion}")
+		classpath("org.jetbrains.kotlin:kotlin-noarg:$kotlinVersion")
 
 	}
 }
 
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-spring'
-apply plugin: 'eclipse'
+apply plugin: "kotlin-jpa"
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.junit.platform.gradle.plugin'
@@ -43,9 +44,19 @@ repositories {
 	maven { url "https://repo.spring.io/milestone" }
 }
 
+junitPlatform {
+    filters {
+        engines {
+            include 'junit-jupiter'
+            exclude 'junit-vintage'
+        }
+    }
+}
 
-
-
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+    test.java.srcDirs += 'src/test/kotlin'
+}
 
 dependencies {
 
@@ -59,28 +70,34 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-web") {
 		exclude module: "spring-boot-starter-tomcat"
 	}
-	compile "org.springframework.boot:spring-boot-starter-jetty"
-	compile "org.springframework.boot:spring-boot-starter-actuator"
+
+	compile("org.springframework.boot:spring-boot-starter-jetty")
+	compile("org.springframework.boot:spring-boot-starter-actuator")
 
 
     // Jackson Dependencies
-	compile "com.fasterxml.jackson.core:jackson-annotations"
-	compile "com.fasterxml.jackson.core:jackson-core"
-	compile "com.fasterxml.jackson.core:jackson-databind"
-	runtime "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
-	runtime "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
-	runtime "com.fasterxml.jackson.module:jackson-module-kotlin"
+	compile("com.fasterxml.jackson.core:jackson-annotations")
+	compile("com.fasterxml.jackson.core:jackson-core")
+	compile("com.fasterxml.jackson.core:jackson-databind")
+	runtime("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
+	runtime("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+	runtime("com.fasterxml.jackson.module:jackson-module-kotlin")
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 
 	// JUnit Jupiter API
 	testCompile("org.junit.jupiter:junit-jupiter-api:${ junitJupiterVersion}")
 	testCompile("org.junit.platform:junit-platform-runner:${junitPlatformVersion}")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
 
 	// Spring extension for JUnit5
 	testCompile fileTree(dir: 'libs', include: '*.jar')
 
-	// TestEngine implementations (only needed at runtime)
-	testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")    //JUnit5
+
+	// https://mvnrepository.com/artifact/de.flapdoodle.embed/de.flapdoodle.embed.mongo
+	testCompile("de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.0")
+
+
+
 
 }

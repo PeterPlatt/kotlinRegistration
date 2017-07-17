@@ -5,7 +5,9 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
@@ -20,8 +22,9 @@ import java.util.*
 import org.hamcrest.core.Is.`is` as Is
 
 @RunWith(SpringRunner::class)
-@SpringBootTest
-class RegistrationControllerTestIT {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Import(EmbeddedMongoAutoConfiguration::class)
+open class RegistrationControllerTest {
 
 
     @Autowired
@@ -48,12 +51,24 @@ class RegistrationControllerTestIT {
 
     @Test
     fun messageEndpointPresent() {
+        val testMessage = "testMessage"
         val testUUID = UUID.randomUUID()
+
+        val messageRegistration = objectMapper.writeValueAsString(RegistrationModel(testMessage, testUUID))
+        mockMvc?.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(messageRegistration))
+                ?.andDo(print())
+                ?.andExpect(jsonPath("$.id", Is(testUUID.toString())))
+
 
         mockMvc?.perform(get("/id/" + testUUID.toString()))
                 ?.andDo(print())
                 ?.andExpect(status().isOk)
                 ?.andExpect(jsonPath("$.id", Is(testUUID.toString())))
+                ?.andExpect(jsonPath("$.message", Is(testMessage)))
+
+        mockMvc?.perform(get("/id/" + UUID.randomUUID().toString()))
+                ?.andDo(print())
+                ?.andExpect(status().is4xxClientError)
     }
 
 
