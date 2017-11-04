@@ -24,13 +24,13 @@ import org.hamcrest.core.Is.`is` as Is
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(EmbeddedMongoAutoConfiguration::class)
-open class RegistrationControllerTest {
+class RegistrationControllerTest {
 
 
     @Autowired
-    var context: WebApplicationContext? = null
+    lateinit var context: WebApplicationContext
 
-    var mockMvc: MockMvc? = null
+    lateinit var mockMvc: MockMvc
     var objectMapper: ObjectMapper = ObjectMapper()
 
     @Before
@@ -44,9 +44,9 @@ open class RegistrationControllerTest {
         val testUUID = UUID.randomUUID()
 
         val messageRegistration = objectMapper.writeValueAsString(RegistrationModel(testMessage, testUUID))
-        mockMvc?.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(messageRegistration))
-                ?.andDo(print())
-                ?.andExpect(jsonPath("$.id", Is(testUUID.toString())))
+        mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(messageRegistration))
+                .andDo(print())
+                .andExpect(jsonPath("$.id", Is(testUUID.toString())))
     }
 
     @Test
@@ -55,20 +55,20 @@ open class RegistrationControllerTest {
         val testUUID = UUID.randomUUID()
 
         val messageRegistration = objectMapper.writeValueAsString(RegistrationModel(testMessage, testUUID))
-        mockMvc?.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(messageRegistration))
-                ?.andDo(print())
-                ?.andExpect(jsonPath("$.id", Is(testUUID.toString())))
+        mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(messageRegistration))
+                .andDo(print())
+                .andExpect(jsonPath("$.id", Is(testUUID.toString())))
 
 
-        mockMvc?.perform(get("/id/" + testUUID.toString()))
-                ?.andDo(print())
-                ?.andExpect(status().isOk)
-                ?.andExpect(jsonPath("$.id", Is(testUUID.toString())))
-                ?.andExpect(jsonPath("$.message", Is(testMessage)))
+        mockMvc.perform(get("/id/" + testUUID.toString()))
+                .andDo(print())
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.id", Is(testUUID.toString())))
+                .andExpect(jsonPath("$.message", Is(testMessage)))
 
-        mockMvc?.perform(get("/id/" + UUID.randomUUID().toString()))
-                ?.andDo(print())
-                ?.andExpect(status().is4xxClientError)
+        mockMvc.perform(get("/id/" + UUID.randomUUID().toString()))
+                .andDo(print())
+                .andExpect(status().is4xxClientError)
     }
 
 
