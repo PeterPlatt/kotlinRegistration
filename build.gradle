@@ -4,6 +4,7 @@ buildscript {
 		springBootVersion = '2.0.0.M5'
 		junitPlatformVersion = '1.0.1'
 		junitJupiterVersion = '5.0.1'
+		log4jVersion = "2.9.1"
 	}
 	repositories {
 		mavenCentral()
@@ -27,6 +28,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.junit.platform.gradle.plugin'
 
+
 version = '0.0.2-SNAPSHOT'
 sourceCompatibility = 1.8
 
@@ -44,13 +46,19 @@ repositories {
 }
 
 junitPlatform {
+	platformVersion '1.0.0'
+	reportsDir file('build/test-results/junit-platform')
+    enableStandardTestTask true
     filters {
         engines {
             include 'junit-jupiter'
             exclude 'junit-vintage'
         }
     }
+
+
 }
+
 
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
@@ -88,6 +96,10 @@ dependencies {
 	testCompile("org.junit.jupiter:junit-jupiter-api:${ junitJupiterVersion}")
 	testCompile("org.junit.platform:junit-platform-runner:${junitPlatformVersion}")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
+    testCompile("org.jetbrains.kotlin:kotlin-test-junit:${kotlinVersion}")
+	// To use Log4J"s LogManager
+	testRuntimeOnly("org.apache.logging.log4j:log4j-core:${log4jVersion}")
+	testRuntimeOnly("org.apache.logging.log4j:log4j-jul:${log4jVersion}")
 
 	// Spring extension for JUnit5
 	testCompile fileTree(dir: 'libs', include: '*.jar')
