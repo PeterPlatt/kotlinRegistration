@@ -47,6 +47,7 @@ class RegistrationControllerTest {
         mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(messageRegistration))
                 .andDo(print())
                 .andExpect(jsonPath("$.id", Is(testUUID.toString())))
+
     }
 
     @Test
