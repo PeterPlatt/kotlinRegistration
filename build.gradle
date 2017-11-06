@@ -7,9 +7,12 @@ buildscript {
 		log4jVersion = "2.9.1"
 	}
 	repositories {
+        mavenLocal()
 		mavenCentral()
+        jcenter()
 		maven { url "https://repo.spring.io/snapshot" }
 		maven { url "https://repo.spring.io/milestone" }
+        maven { url "http://repo1.maven.org/maven2/" }
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -27,10 +30,12 @@ apply plugin: "kotlin-jpa"
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'jacoco'
 
 
 version = '0.0.2-SNAPSHOT'
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 compileKotlin {
 	kotlinOptions.jvmTarget = "1.8"
@@ -107,4 +112,23 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/de.flapdoodle.embed/de.flapdoodle.embed.mongo
 	testCompile("de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.0")
+}
+
+task codeCoverageReport(type: JacocoReport) {
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+    subprojects.each {
+        sourceSets it.sourceSets.main
+    }
+
+    reports {
+        xml.enabled true
+        xml.destination "${buildDir}/reports/jacoco/report.xml"
+        html.enabled false
+        csv.enabled false
+    }
+}
+
+codeCoverageReport.dependsOn {
+    subprojects*.test
 }
