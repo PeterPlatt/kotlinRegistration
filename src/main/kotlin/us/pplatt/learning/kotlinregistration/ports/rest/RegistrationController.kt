@@ -3,8 +3,8 @@ package us.pplatt.learning.kotlinregistration.ports.rest
 import com.fasterxml.jackson.annotation.JsonCreator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
-import us.pplatt.learning.kotlinregistration.us.pplatt.learning.kotlinregistration.ports.persistence.mongo.Message
-import us.pplatt.learning.kotlinregistration.us.pplatt.learning.kotlinregistration.ports.persistence.mongo.MessageRegistration
+import us.pplatt.learning.kotlinregistration.ports.persistence.mongo.Message
+import us.pplatt.learning.kotlinregistration.ports.persistence.mongo.MessageRegistration
 import java.util.*
 import javax.servlet.http.HttpServletResponse
 
@@ -12,17 +12,17 @@ import javax.servlet.http.HttpServletResponse
 class RegistrationController {
 
     @Autowired
-    var messageRegistration: MessageRegistration? = null
+    lateinit var messageRegistration: MessageRegistration
 
     @RequestMapping("/register", method = arrayOf(RequestMethod.POST))
     fun register(@RequestBody registration: RegistrationModel): RegistrationId {
-        messageRegistration?.save(Message(registration.id, registration.message))
+        messageRegistration.save(Message(registration.id, registration.message))
         return RegistrationId(registration.id)
     }
 
     @RequestMapping("/id/{messageId}", method = arrayOf(RequestMethod.GET))
     fun getMessageById(@PathVariable(value = "messageId") messageId: UUID, response: HttpServletResponse): RegistrationModel {
-        val findById = messageRegistration?.findById(messageId)
+        val findById = messageRegistration.findById(messageId)
 
         if (findById != null && findById.isPresent) {
             return RegistrationModel(findById.get().message, findById.get().id)

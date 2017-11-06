@@ -1,4 +1,4 @@
-package us.pplatt.learning.kotlinregistration.us.pplatt.learning.kotlinregistration.ports.persistence.mongo
+package us.pplatt.learning.kotlinregistration.ports.persistence.mongo
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.repository.MongoRepository
