@@ -71,6 +71,4 @@ class RegistrationControllerTest {
                 .andDo(print())
                 .andExpect(status().is4xxClientError)
     }
-
-
 }

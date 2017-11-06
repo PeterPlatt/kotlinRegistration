@@ -23,13 +23,11 @@ class RegistrationController {
     @RequestMapping("/id/{messageId}", method = arrayOf(RequestMethod.GET))
     fun getMessageById(@PathVariable(value = "messageId") messageId: UUID, response: HttpServletResponse): RegistrationModel {
         val findById = messageRegistration.findById(messageId)
-
-        if (findById != null && findById.isPresent) {
-            return RegistrationModel(findById.get().message, findById.get().id)
+        return findById.map { RegistrationModel(it.message, it.id) }.orElseGet({
+            response.sendError(404, "Response not found")
+            RegistrationModel("", messageId)
         }
-
-        response.sendError(404, "Response not found")
-        return RegistrationModel("", messageId)
+        )
     }
 
 }
