@@ -79,6 +79,9 @@ dependencies {
 		exclude module: "spring-boot-starter-tomcat"
 	}
 
+	//Logger
+	compile('io.github.microutils:kotlin-logging:1.4.6')
+
 	compile("org.springframework.boot:spring-boot-starter-jetty")
 	compile("org.springframework.boot:spring-boot-starter-actuator")
 
@@ -98,7 +101,7 @@ dependencies {
 	testCompile("org.junit.platform:junit-platform-runner:${junitPlatformVersion}")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
     testCompile("org.jetbrains.kotlin:kotlin-test-junit:${kotlinVersion}")
-	// To use Log4J"s LogManager
+	// To use Log4J's LogManager
 	testRuntimeOnly("org.apache.logging.log4j:log4j-core:${log4jVersion}")
 	testRuntimeOnly("org.apache.logging.log4j:log4j-jul:${log4jVersion}")
 
