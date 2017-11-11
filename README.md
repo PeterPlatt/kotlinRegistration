@@ -17,8 +17,8 @@ gradle bootRun
 |registrationMongoPassword| Password used for mongodb user   |  pass123  |
 |registrationMongoUserName| Username used for mongodb user  | UN123  |
 |registrationMongoDatabase| Mongodb database name  | testMongo  |
-|registrationMongoHost    | mongodb host  |   |
-|registrationMongoPort    | mongodb port  |   |
+|registrationMongoHost    | mongodb host  | something.mlab.com  |
+|registrationMongoPort    | mongodb port  | 1235  |
 
 # How to run the Tests
 The tests use an embedded mongoDb instance and can be run with no external setup. Execute the command below to run the 
