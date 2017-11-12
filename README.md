@@ -29,3 +29,8 @@ gradle test
 
 # Resources 
 * Logging [Kotlin Logging](https://github.com/MicroUtils/kotlin-logging)
+* Try Kotlin [kotlin try it](https://try.kotl.in/#/Examples/Hello,%20world!/Simplest%20version/Simplest%20version.kt)
+* [jUnit 5, Spring boot , and kotlin](https://objectpartners.com/2016/07/26/junit-5-with-spring-boot-plus-kotlin/)
+* [How to build a Simple REST API with Kotlin and Spring Boot](https://scotch.io/@grahamcox82/how-to-build-a-simple-rest-api-with-kotlin-and-spring-boot)
+* [Udemy Introduction to Kotlin](https://www.udemy.com/kotlin-java/)
+* [Kotlin in Action chapter 1](https://livebook.manning.com/#!/book/kotlin-in-action/chapter-1/1)
