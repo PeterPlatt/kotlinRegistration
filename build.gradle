@@ -1,9 +1,9 @@
 buildscript {
 	ext {
-		kotlinVersion = '1.1.51'
-		springBootVersion = '2.0.0.M5'
-		junitPlatformVersion = '1.0.1'
-		junitJupiterVersion = '5.0.1'
+		kotlinVersion = '1.2.10'
+		springBootVersion = '2.0.0.M7'
+		junitPlatformVersion = '1.0.2'
+		junitJupiterVersion = '5.0.2'
 		log4jVersion = "2.9.1"
 	}
 	repositories {
@@ -80,7 +80,7 @@ dependencies {
 	}
 
 	//Logger
-	compile('io.github.microutils:kotlin-logging:1.4.6')
+	compile('io.github.microutils:kotlin-logging:1.4.9')
 
 	compile("org.springframework.boot:spring-boot-starter-jetty")
 	compile("org.springframework.boot:spring-boot-starter-actuator")
