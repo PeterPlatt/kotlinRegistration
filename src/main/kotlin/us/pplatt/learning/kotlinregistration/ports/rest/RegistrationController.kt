@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import reactor.core.publisher.Mono
+import reactor.core.publisher.toMono
 import us.pplatt.learning.kotlinregistration.ports.persistence.mongo.Message
 import us.pplatt.learning.kotlinregistration.ports.persistence.mongo.MessageRegistration
 import java.util.*
-import javax.servlet.http.HttpServletResponse
 
 private val logger = KotlinLogging.logger {}
 
@@ -17,24 +18,23 @@ class RegistrationController {
     @Autowired
     lateinit var messageRegistration: MessageRegistration
 
-
-    @RequestMapping("/register", method = arrayOf(RequestMethod.POST))
-    fun register(@RequestBody registration: RegistrationModel): RegistrationId {
+    @PostMapping("/register")
+    fun register(@RequestBody registration: RegistrationModel): Mono<RegistrationId> {
         logger.info { "Request made :$registration"}
         messageRegistration.save(Message(registration.id, registration.message))
-        return RegistrationId(registration.id)
+        return Mono.just(RegistrationId(registration.id))
     }
 
-    @RequestMapping("/id/{messageId}", method = arrayOf(RequestMethod.GET))
-    fun getMessageById(@PathVariable(value = "messageId") messageId: UUID, response: HttpServletResponse): RegistrationModel {
+    @GetMapping("/id/{messageId}")
+    fun getMessageById(@PathVariable(value = "messageId") messageId: UUID): Mono<RegistrationModel> {
         logger.info { "Request made :$messageId"}
-        val findById = messageRegistration.findById(messageId)
-        logger.info { "findById :$findById"}
-        return findById.map { RegistrationModel(it.message, it.id) }.orElseGet({
-            response.sendError(404, "Response not found")
-            RegistrationModel("", messageId)
-        }
-        )
+
+        return messageRegistration.findById(messageId).map { RegistrationModel(it.message, it.id) }.toMono()
+//                .orElseGet({
+//            response.sendError(404, "Response not found")
+//            RegistrationModel("", messageId)
+//        }
+//        )
     }
 
 }

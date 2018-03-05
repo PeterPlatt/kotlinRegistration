@@ -23,7 +23,6 @@ buildscript {
 
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-spring'
-apply plugin: "kotlin-jpa"
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.junit.platform.gradle.plugin'
@@ -70,15 +69,14 @@ dependencies {
 
 	compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}")
 	compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
-	testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
+	testCompile ("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
 
 	// Spring Dependencies
-	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
-	compile('org.springframework.boot:spring-boot-starter-data-rest')
-	compile("org.springframework.boot:spring-boot-starter-web") {
-		exclude module: "spring-boot-starter-tomcat"
-	}
+	compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
 
+    compile('org.springframework.boot:spring-boot-starter-webflux')
+
+    compile("org.jetbrains.kotlin:kotlin-reflect")
 	//Logger
 	compile('io.github.microutils:kotlin-logging:1.4.9')
 
@@ -95,20 +93,5 @@ dependencies {
 	runtime("com.fasterxml.jackson.module:jackson-module-kotlin")
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-
-	// JUnit Jupiter API
-	testCompile("org.junit.jupiter:junit-jupiter-api:${ junitJupiterVersion}")
-	testCompile("org.junit.platform:junit-platform-runner:${junitPlatformVersion}")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
-    testCompile("org.jetbrains.kotlin:kotlin-test-junit:${kotlinVersion}")
-	// To use Log4J's LogManager
-	testRuntimeOnly("org.apache.logging.log4j:log4j-core:${log4jVersion}")
-	testRuntimeOnly("org.apache.logging.log4j:log4j-jul:${log4jVersion}")
-
-	// Spring extension for JUnit5
-	testCompile fileTree(dir: 'libs', include: '*.jar')
-
-
-	// https://mvnrepository.com/artifact/de.flapdoodle.embed/de.flapdoodle.embed.mongo
-	testCompile("de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.0.0")
+	testCompile('io.projectreactor:reactor-test')
 }
