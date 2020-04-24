@@ -29,12 +29,8 @@ class RegistrationController {
     fun getMessageById(@PathVariable(value = "messageId") messageId: UUID): Mono<RegistrationModel> {
         logger.info { "Request made :$messageId"}
 
-        return messageRegistration.findById(messageId).map { RegistrationModel(it.message, it.id) }.toMono()
-                .orElseGet({
-            response.sendError(404, "Response not found")
-            RegistrationModel("", messageId)
-        }
-        )
+        return messageRegistration.findById(messageId).map { RegistrationModel(it.message, it.id) }
+        
     }
 
 }
