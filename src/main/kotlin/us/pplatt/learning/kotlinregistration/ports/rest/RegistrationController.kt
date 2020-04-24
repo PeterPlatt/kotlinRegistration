@@ -14,9 +14,6 @@ private val logger = KotlinLogging.logger {}
 @RestController
 class RegistrationController(@Autowired var messageRegistration: MessageRegistration) {
 
-    
-
-
     @RequestMapping("/register", method = [RequestMethod.POST])
     fun register(@RequestBody registration: RegistrationModel): RegistrationId {
         logger.info { "Request made :$registration"}
