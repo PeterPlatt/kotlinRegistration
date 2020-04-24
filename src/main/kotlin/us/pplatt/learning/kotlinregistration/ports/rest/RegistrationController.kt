@@ -12,29 +12,28 @@ import javax.servlet.http.HttpServletResponse
 private val logger = KotlinLogging.logger {}
 
 @RestController
-class RegistrationController {
+class RegistrationController(@Autowired var messageRegistration: MessageRegistration) {
 
-    @Autowired
-    lateinit var messageRegistration: MessageRegistration
+    
 
 
-    @RequestMapping("/register", method = arrayOf(RequestMethod.POST))
+    @RequestMapping("/register", method = [RequestMethod.POST])
     fun register(@RequestBody registration: RegistrationModel): RegistrationId {
         logger.info { "Request made :$registration"}
         messageRegistration.save(Message(registration.id, registration.message))
         return RegistrationId(registration.id)
     }
 
-    @RequestMapping("/id/{messageId}", method = arrayOf(RequestMethod.GET))
+    @RequestMapping("/id/{messageId}", method = [RequestMethod.GET])
     fun getMessageById(@PathVariable(value = "messageId") messageId: UUID, response: HttpServletResponse): RegistrationModel {
-        logger.info { "Request made :$messageId"}
+        logger.info { "Request made :$messageId" }
         val findById = messageRegistration.findById(messageId)
-        logger.info { "findById :$findById"}
-        return findById.map { RegistrationModel(it.message, it.id) }.orElseGet({
-            response.sendError(404, "Response not found")
-            RegistrationModel("", messageId)
-        }
-        )
+        logger.info { "findById :$findById" }
+        return findById.map { RegistrationModel(it.message, it.id) }
+                .orElseGet {
+                    response.sendError(404, "Response not found")
+                    RegistrationModel("", messageId)
+                }
     }
 
 }
