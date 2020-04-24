@@ -13,10 +13,7 @@ import java.util.*
 private val logger = KotlinLogging.logger {}
 
 @RestController
-class RegistrationController {
-
-    @Autowired
-    lateinit var messageRegistration: MessageRegistration
+class RegistrationController(@Autowired var messageRegistration: MessageRegistration) {
 
     @PostMapping("/register")
     fun register(@RequestBody registration: RegistrationModel): Mono<RegistrationId> {
